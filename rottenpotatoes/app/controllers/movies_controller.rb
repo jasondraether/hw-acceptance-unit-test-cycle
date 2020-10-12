@@ -1,4 +1,5 @@
 class MoviesController < ApplicationController
+include MoviesHelper
 
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
@@ -64,11 +65,10 @@ class MoviesController < ApplicationController
   def similar
     @movie = Movie.find params[:id]
     if @movie.director.empty?
-      flash[:notice] = "This movie has no director. Returned to all movies page."
+      flash[:notice] = "'#{@movie.title}' has no director info"
       redirect_to movies_path
     else 
       @movies = Movie.where(director: @movie.director)
     end 
   end 
-
 end

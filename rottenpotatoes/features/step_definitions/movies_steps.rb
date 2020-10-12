@@ -24,9 +24,30 @@ Then /I should see all the movies/ do
   end
 end
 
+Then /I should not see the "(.*)" movie/ do |movie_title|
+  movie = Movie.find_by(title:movie_title)
+  expect(movie.nil?)
+end 
+
+# Then /I should see "'(.*)' has no director info"/ do |movie_title|
+#   movie = Movie.find_by(title:movie_title)
+#   step %{I should see "#{movie.director}"}
+#   # movie = Movie.find_by(title:movie_title)
+#   # expect(movie.director.empty?)
+# end 
 
 Then /the director of "(.*)" should be "(.*)"/ do |movie_title, movie_director|
   movie = Movie.find_by(title:movie_title)
   expect(movie.director == movie_director)
 end 
 
+When /I add a new movie/ do 
+  visit new_movie_path
+end 
+
+
+When /I select date "([^"]*)-([^"]*)-([^"]*)" from "Released On"/ do |day, month, year|
+  select(year, :from => "movie_release_date_1i")
+  select(month, :from => "movie_release_date_2i")
+  select(day, :from => "movie_release_date_3i")
+end
